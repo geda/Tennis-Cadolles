@@ -1,0 +1,2 @@
+serviceClass: ch.creasystem.tennis.client.login.LoginService
+path: EEB73AC3C89950FF0BFBD59489CE00E1.gwt.rpc

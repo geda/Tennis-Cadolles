@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+  <!-- Servlets -->
+  
+  	<servlet>
+		<servlet-name>rankingService</servlet-name>
+		<servlet-class>ch.creasystem.tennis.server.ranking.RankingServiceImpl</servlet-class>
+	</servlet>
+
+ 	<servlet>
+		<servlet-name>playerService</servlet-name>
+		<servlet-class>ch.creasystem.tennis.server.player.PlayerServiceImpl</servlet-class>
+	</servlet>
+ 	<servlet>
+		<servlet-name>matchService</servlet-name>
+		<servlet-class>ch.creasystem.tennis.server.match.MatchServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>ch.creasystem.tennis.server.login.LoginServiceImpl</servlet-class>
+	</servlet>
+  <servlet-mapping>
+    <servlet-name>rankingService</servlet-name>
+    <url-pattern>/tenniscadollesgwt/ranking</url-pattern>
+  </servlet-mapping>  
+
+  <servlet-mapping>
+    <servlet-name>playerService</servlet-name>
+    <url-pattern>/tenniscadollesgwt/player</url-pattern>
+  </servlet-mapping>  
+  
+  	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/tenniscadollesgwt/login</url-pattern>
+	</servlet-mapping>
+  	<servlet-mapping>
+		<servlet-name>matchService</servlet-name>
+		<url-pattern>/tenniscadollesgwt/match</url-pattern>
+	</servlet-mapping>
+	
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>TennisCadollesGWT.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

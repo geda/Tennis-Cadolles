@@ -1,0 +1,2 @@
+serviceClass: ch.creasystem.tennis.client.player.PlayerService
+path: 39462FA3F72FE79A3005BB4EE26E83D8.gwt.rpc
