@@ -3,7 +3,9 @@ package ch.creasystem.tennis.server.player;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import ch.creasystem.tennis.client.login.LoginService;
 import ch.creasystem.tennis.client.player.PlayerService;
+import ch.creasystem.tennis.server.login.LoginServiceImpl;
 import ch.creasystem.tennis.server.match.DAOPlayer;
 import ch.creasystem.tennis.shared.player.Player;
 
@@ -13,6 +15,7 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements
 PlayerService {
 	
 	DAOPlayer daoPlayer = new DAOPlayer();
+	LoginService loginService = new LoginServiceImpl();
 
 	@Override
 	public ArrayList<Player> getPlayerList() {
@@ -29,11 +32,13 @@ PlayerService {
 	}
 	@Override
 	public Player createAPlayer(String firstName, String lastName, String nickName, String birthday, String googleAccount, String notificationMail) throws Exception {
+		loginService.getPlayerLoggedIn();
 		return daoPlayer.createAPlayer(firstName, lastName, nickName, birthday, googleAccount, notificationMail);
 	}
 
 	@Override
 	public void deletePlayer(Long playerId) throws Exception {
+		loginService.getPlayerLoggedIn();
 		Player player = daoPlayer.get(playerId);
 		if (player == null){
 			throw new Exception("Le joueur a effacé avec l'Id "+playerId+" n'existe pas.");
@@ -43,6 +48,7 @@ PlayerService {
 
 	@Override
 	public Player updatePlayer(Player player) throws Exception {
+		loginService.getPlayerLoggedIn();
 		return daoPlayer.updatePlayer(player);
 	}
 

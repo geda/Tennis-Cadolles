@@ -1,5 +1,6 @@
 package ch.creasystem.tennis.server.login;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,8 +8,7 @@ import ch.creasystem.tennis.client.login.LoginInfo;
 import ch.creasystem.tennis.client.login.LoginService;
 import ch.creasystem.tennis.client.login.NotAuthorizedException;
 import ch.creasystem.tennis.client.login.NotLoggedInException;
-import ch.creasystem.tennis.client.player.PlayerService;
-import ch.creasystem.tennis.server.player.PlayerServiceImpl;
+import ch.creasystem.tennis.server.match.DAOPlayer;
 import ch.creasystem.tennis.shared.player.Player;
 
 import com.google.appengine.api.users.User;
@@ -18,9 +18,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
 
-	private PlayerService playerService = new PlayerServiceImpl();
 	private Logger LOG = Logger.getLogger(LoginServiceImpl.class.getName());
-
+	DAOPlayer daoPlayer = new DAOPlayer();
+	
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
@@ -32,6 +32,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			loginInfo.setNickname(user.getNickname());
 			loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
 			loginInfo.setUserId(user.getUserId());
+			if (getLoggerPlayer(user) != null) {
+				loginInfo.setAuthorised(true);
+			}
 		} else {
 			loginInfo.setLoggedIn(false);
 			loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
@@ -48,19 +51,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			LOG.log(Level.SEVERE, "L'utilisateur n'est pas loggé");
 			throw new NotLoggedInException("L'utilisateur n'est pas loggé");
 		}
-		Player loggedPlayer = null;
+		Player loggedPlayer = getLoggerPlayer(user);
 		
-		if (user.getEmail().equals("test@example.com")) {
-			// pour le dev local
-			loggedPlayer = playerService.getPlayerList().get(0);
-			return loggedPlayer;
-		}
-		for (Player player :playerService.getPlayerList()) {
-			if (player.getGoogleAccount().equals(user.getEmail())) {
-				loggedPlayer = player;
-				break;
-			}
-		}
 		
 		if (loggedPlayer == null) {
 			LOG.log(Level.INFO, "L'utilisateur loggé n'est pas un joueur");
@@ -68,5 +60,27 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		}
 		
 		return loggedPlayer;
+	}
+	
+	private Player getLoggerPlayer(User user) {
+		Player loggedPlayer = null;
+		
+		if (user.getEmail().equals("test@example.com")) {
+			// pour le dev local
+			loggedPlayer = getPlayerList().get(0);
+			return loggedPlayer;
+		}
+		for (Player player : getPlayerList()) {
+			if (player.getGoogleAccount().equals(user.getEmail())) {
+				loggedPlayer = player;
+				break;
+			}
+		}
+	
+		return loggedPlayer;
+	}
+	
+	private ArrayList<Player> getPlayerList() {
+		return (ArrayList<Player>) daoPlayer.findAll();
 	}
 }

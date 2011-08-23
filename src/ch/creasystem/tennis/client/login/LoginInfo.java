@@ -5,11 +5,21 @@ import java.io.Serializable;
 public class LoginInfo implements Serializable {
 
 	private boolean loggedIn = false;
+	private boolean authorised = false;
 	private String loginUrl;
 	private String logoutUrl;
 	private String emailAddress;
 	private String nickname;
 	private String userId;
+
+	
+	public boolean isAuthorised() {
+		return authorised;
+	}
+
+	public void setAuthorised(boolean authorised) {
+		this.authorised = authorised;
+	}
 
 	public boolean isLoggedIn() {
 		return loggedIn;

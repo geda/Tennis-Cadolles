@@ -11,8 +11,6 @@ import java.util.TreeMap;
 import org.datanucleus.util.StringUtils;
 
 import ch.creasystem.tennis.client.login.LoginService;
-import ch.creasystem.tennis.client.login.NotAuthorizedException;
-import ch.creasystem.tennis.client.login.NotLoggedInException;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.match.MatchValidationException;
 import ch.creasystem.tennis.client.player.PlayerService;
@@ -31,9 +29,8 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 	PlayerService playerService = new PlayerServiceImpl();
 	
 	@Override
-	public ArrayList<Match> getMatchList(Integer saison) throws NotLoggedInException, NotAuthorizedException {
+	public ArrayList<Match> getMatchList(Integer saison) {
 		int tennisSaison;
-		loginService.getPlayerLoggedIn();
 		
 		if (saison != null) {
 			tennisSaison = saison;
@@ -84,6 +81,8 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public void deleteMatch(Long matchId) throws Exception {
+		loginService.getPlayerLoggedIn();
+		
 		Match match = daoMatch.get(matchId);
 		if (match == null) {
 			throw new Exception("Le Match a effacer avec l'Id " + matchId + " n'existe pas.");
@@ -94,11 +93,14 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public Match updateMatch(Match match) throws Exception {
+		loginService.getPlayerLoggedIn();
 		return daoMatch.updateMatch(match);
 	}
 
 	@Override
-	public String getAllMatchCsv() {
+	public String getAllMatchCsv() throws Exception {
+		loginService.getPlayerLoggedIn();
+		
 		StringBuilder sb = new StringBuilder();
 		List<Match> matchList = daoMatch.findAll();
 		TreeMap<Long, Player> playerMap = playerService.getPlayerMap();

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import ch.creasystem.tennis.client.login.LoginInfo;
 import ch.creasystem.tennis.client.login.LoginService;
 import ch.creasystem.tennis.client.login.LoginServiceAsync;
+import ch.creasystem.tennis.client.login.NotLoggedInException;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.match.MatchServiceAsync;
 import ch.creasystem.tennis.client.match.MatchValidationException;
@@ -116,11 +117,17 @@ public class TennisCadollesGWT implements EntryPoint {
 		      });
 		Button matchButton = new Button("Matches", new ClickHandler() {
 		      public void onClick(ClickEvent event) {
+		    	  if (!checkAuthorised()) {
+		    		  return;
+		    	  }
 		    	  loadServiceMatchList();
 		        }
 		      });
 		Button playerButton = new Button("Joueurs", new ClickHandler() {
 		      public void onClick(ClickEvent event) {
+		    	  if (!checkAuthorised()) {
+		    		  return;
+		    	  }
 		    	  loadServicePlayerList();
 		        }
 		      });
@@ -137,9 +144,7 @@ public class TennisCadollesGWT implements EntryPoint {
 		if (loginInfo.isLoggedIn()) {
 			signOutLink.setHref(loginInfo.getLogoutUrl());
 			Label welcome = new Label("Bienvenue " + loginInfo.getNickname() + " !");
-			Label userId = new Label("Ton UserId est " + loginInfo.getUserId());
 			loginPanel.add(welcome);
-			loginPanel.add(userId);
 			loginPanel.add(signOutLink);
 		} else {
 			signInLink.setHref(loginInfo.getLoginUrl());
@@ -1132,6 +1137,9 @@ public class TennisCadollesGWT implements EntryPoint {
 
 	private void handleError(Throwable error) {
 		Window.alert(error.getMessage());
+	    if (error instanceof NotLoggedInException) {
+	      Window.Location.replace(loginInfo.getLoginUrl());
+	    }
 	}
 
 	private void displayError(String message) {
@@ -1142,5 +1150,18 @@ public class TennisCadollesGWT implements EntryPoint {
 	  RootPanel main = RootPanel.get("main");
 	  main.clear();
 	  main.add(panel);
+	}
+	
+	private boolean checkAuthorised() {
+  	  if (!loginInfo.isLoggedIn()) {
+		  Window.Location.replace(loginInfo.getLoginUrl());
+		  return false;
+	  }
+  	  if (!loginInfo.isAuthorised()) {
+  		  Window.alert("Fonction non disponible pour l'utilisateur "+loginInfo.getNickname());
+  		  return false;
+  	  }
+  	  return true;
+
 	}
 }
