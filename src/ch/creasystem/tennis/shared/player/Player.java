@@ -22,7 +22,6 @@ public class Player implements Serializable {
 
 	private String nickName;
 	
-	private String birthday;
 	
 	private String googleAccount;
 	
@@ -34,11 +33,10 @@ public class Player implements Serializable {
 		super();
 	}
 
-	public Player(String firstName, String lastName, String nickName, String birthday, String googleAccount, String notificationMail) {
+	public Player(String firstName, String lastName, String nickName, String googleAccount, String notificationMail) {
 		this.lastName = lastName;
 		this.firstName = firstName;
 		this.nickName = nickName;
-		this.birthday = birthday;
 		this.googleAccount = googleAccount;
 		this.notificationMail = notificationMail;
 	}
@@ -57,14 +55,6 @@ public class Player implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-	}
-
-	public String getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
 	}
 
 	public String getNickName() {

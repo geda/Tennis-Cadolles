@@ -8,6 +8,6 @@ public interface LoginServiceAsync {
 
 	void login(String requestUri, AsyncCallback<LoginInfo> callback);
 
-	void getPlayerLoggedIn(AsyncCallback<Player> callback);
+	void isUserAuthotized(AsyncCallback<Player> callback);
 
 }

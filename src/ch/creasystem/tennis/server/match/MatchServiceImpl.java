@@ -48,7 +48,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 	public Match createMatch(Date date, Player winner, Player looser, Player winner2, Player looser2, String score,
 			Float point, Float valeurMatch, Boolean doubleMatch, String commentaire, Boolean sendNotification) throws Exception {
 		
-		Player loggedPlayer = loginService.getPlayerLoggedIn();
+		Player loggedPlayer = loginService.isUserAuthotized();
 		
 		if (date == null) {
 			throw new MatchValidationException("Date incorrecte");
@@ -81,7 +81,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public void deleteMatch(Long matchId) throws Exception {
-		loginService.getPlayerLoggedIn();
+		loginService.isUserAuthotized();
 		
 		Match match = daoMatch.get(matchId);
 		if (match == null) {
@@ -93,13 +93,13 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public Match updateMatch(Match match) throws Exception {
-		loginService.getPlayerLoggedIn();
+		loginService.isUserAuthotized();
 		return daoMatch.updateMatch(match);
 	}
 
 	@Override
 	public String getAllMatchCsv() throws Exception {
-		loginService.getPlayerLoggedIn();
+		loginService.isUserAuthotized();
 		
 		StringBuilder sb = new StringBuilder();
 		List<Match> matchList = daoMatch.findAll();
@@ -111,16 +111,16 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 				sb.append(df.format(match.getDate()));
 			}
 			sb.append(",");
-			sb.append(playerMap.get(match.getWinner()).getFirstName());
+			sb.append(playerMap.get(match.getWinner().getId()).getFirstName());
 			sb.append(",");
 			if (match.isDoubleMatch()) {
-				sb.append(playerMap.get(match.getWinner2()).getFirstName());
+				sb.append(playerMap.get(match.getWinner2().getId()).getFirstName());
 			}
 			sb.append(",");
-			sb.append(playerMap.get(match.getLooser()).getFirstName());
+			sb.append(playerMap.get(match.getLooser().getId()).getFirstName());
 			sb.append(",");
 			if (match.isDoubleMatch()) {
-				sb.append(playerMap.get(match.getLooser2()).getFirstName());
+				sb.append(playerMap.get(match.getLooser2().getId()).getFirstName());
 			}
 			sb.append(",");
 			sb.append(match.getPoint());

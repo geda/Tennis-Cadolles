@@ -9,5 +9,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface LoginService extends RemoteService {
   public LoginInfo login(String requestUri);
 
-  public Player getPlayerLoggedIn() throws NotLoggedInException, NotAuthorizedException;
+  public Player isUserAuthotized() throws NotLoggedInException, NotAuthorizedException;
 }

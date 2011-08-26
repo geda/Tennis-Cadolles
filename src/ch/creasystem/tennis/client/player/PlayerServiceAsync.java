@@ -11,7 +11,8 @@ public interface PlayerServiceAsync {
 
 	public void getPlayerList(AsyncCallback<ArrayList<Player>> callback);
 
-	public void createAPlayer(String firstName, String lastName, String nickName, String birthday, String email, String userId,
+	void createAPlayer(String firstName, String lastName, String nickName,
+			 String email, String userId,
 			AsyncCallback<Player> callback);
 
 	void deletePlayer(Long playerId, AsyncCallback<Void> callback);

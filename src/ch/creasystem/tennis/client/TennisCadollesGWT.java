@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -64,24 +66,26 @@ public class TennisCadollesGWT implements EntryPoint {
 	private TextBox firstNamePlayer = new TextBox();
 	private TextBox lastNamePlayer = new TextBox();
 	private TextBox nickNamePlayer = new TextBox();
-	private TextBox birthdayPlayer = new TextBox();
 	private TextBox emailPlayer = new TextBox();
 	private TextBox userIdPlayer = new TextBox();
 	private Button addPlayerButton = new Button("Ajouter");
 
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label("Please sign in to your Google Account to access the Tennis application.");
-	private Anchor signInLink = new Anchor("Sign In");
-	private Anchor signOutLink = new Anchor("Sign Out");
+	private Label loginLabel = new Label("Login Google");
+	private Anchor signInLink = new Anchor("S'identifier");
+	private Anchor signOutLink = new Anchor("Se d√©connecter");
 
 	private ArrayList<PlayerRanking> rankingList = null;
-	private final RankingServiceAsync rankingService = GWT.create(RankingService.class);
+	private final RankingServiceAsync rankingService = GWT
+			.create(RankingService.class);
 	private ArrayList<Player> playerList = null;
 	private HashMap<Long, Player> playerMap = null;
 	private ArrayList<Match> matchList = null;
-	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
-	private final MatchServiceAsync matchService = GWT.create(MatchService.class);
+	private final PlayerServiceAsync playerService = GWT
+			.create(PlayerService.class);
+	private final MatchServiceAsync matchService = GWT
+			.create(MatchService.class);
 
 	/**
 	 * This is the entry point method.
@@ -96,62 +100,73 @@ public class TennisCadollesGWT implements EntryPoint {
 
 	private void doLogin() {
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
-			public void onFailure(Throwable error) {
-				handleError(error);
-			}
+		loginService.login(GWT.getHostPageBaseURL(),
+				new AsyncCallback<LoginInfo>() {
+					public void onFailure(Throwable error) {
+						handleError(error);
+					}
 
-			public void onSuccess(LoginInfo result) {
-				loginInfo = result;
-				loadLogin();
-			}
-		});
+					public void onSuccess(LoginInfo result) {
+						loginInfo = result;
+						loadLogin();
+					}
+				});
 	}
-	
+
 	private void initNavigation() {
 		HorizontalPanel hz = new HorizontalPanel();
+		hz.setWidth("600px");
 		Button rankingButton = new Button("Classement", new ClickHandler() {
-		      public void onClick(ClickEvent event) {
-		    	  loadRankingList();
-		        }
-		      });
+			public void onClick(ClickEvent event) {
+				loadRankingList();
+			}
+		});
 		Button matchButton = new Button("Matches", new ClickHandler() {
-		      public void onClick(ClickEvent event) {
-		    	  if (!checkAuthorised()) {
-		    		  return;
-		    	  }
-		    	  loadServiceMatchList();
-		        }
-		      });
+			public void onClick(ClickEvent event) {
+				if (!checkAuthorised()) {
+					return;
+				}
+				loadServiceMatchList();
+			}
+		});
 		Button playerButton = new Button("Joueurs", new ClickHandler() {
-		      public void onClick(ClickEvent event) {
-		    	  if (!checkAuthorised()) {
-		    		  return;
-		    	  }
-		    	  loadServicePlayerList();
-		        }
-		      });
-		
+			public void onClick(ClickEvent event) {
+				if (!checkAuthorised()) {
+					return;
+				}
+				loadServicePlayerList();
+			}
+		});
+		rankingButton.addStyleName("navigationButton");
+		matchButton.addStyleName("navigationButton");
+		playerButton.addStyleName("navigationButton");
 		hz.add(rankingButton);
 		hz.add(matchButton);
 		hz.add(playerButton);
-		
+
 		RootPanel.get("navigation").add(hz);
 	}
-	
+
 	private void loadLogin() {
 		// Assemble login panel.
 		if (loginInfo.isLoggedIn()) {
 			signOutLink.setHref(loginInfo.getLogoutUrl());
-			Label welcome = new Label("Bienvenue " + loginInfo.getNickname() + " !");
+			Label welcome = new Label("Bienvenue " + loginInfo.getNickname()
+					+ " !");
 			loginPanel.add(welcome);
 			loginPanel.add(signOutLink);
 		} else {
 			signInLink.setHref(loginInfo.getLoginUrl());
+			loginLabel.setWidth("150px");
+			loginPanel.setWidth("100%");
+			loginPanel
+					.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+			loginLabel.addStyleName("loginPanel");
+
 			loginPanel.add(loginLabel);
 			loginPanel.add(signInLink);
 		}
-		RootPanel.get("Login").add(loginPanel);
+		RootPanel.get("login").add(loginPanel);
 	}
 
 	private void loadMatchList() {
@@ -165,7 +180,9 @@ public class TennisCadollesGWT implements EntryPoint {
 		matchFlexTable.setText(0, 1, "Joueurs");
 		matchFlexTable.setText(0, 2, "Scores");
 		matchFlexTable.getFlexCellFormatter().setColSpan(0, 2, 3);
-		matchFlexTable.setText(0, 3, "Match terminé");
+		matchFlexTable.setText(0, 3, "Match termin√©");
+		matchFlexTable
+				.setHTML(0, 3, new HTML("Match termin&eacute;").getHTML());
 		matchFlexTable.setText(0, 4, "Commentaire");
 		matchFlexTable.setText(0, 5, "Action");
 
@@ -182,7 +199,7 @@ public class TennisCadollesGWT implements EntryPoint {
 
 		matchFlexTable.addStyleName("rankinglisttable");
 		matchPanel.add(matchFlexTable);
-		
+
 		setMainPanel(matchPanel);
 	}
 
@@ -252,7 +269,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		matchFlexTable.setWidget(row, 4, set3);
 
 		CheckBox completedmatch = new CheckBox();
-		completedmatch.setTitle("Cocher si le match c'est terminé en 2 sets gagnant");
+		completedmatch
+				.setTitle("Cocher si le match c'est termin√© en 2 sets gagnant");
 		TextArea commentaireMatch = new TextArea();
 
 		completedmatch.setValue(true);
@@ -260,7 +278,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		matchFlexTable.setWidget(row, 6, commentaireMatch);
 		CheckBox sendNotification = new CheckBox();
 		sendNotification.setValue(true);
-		sendNotification.setTitle("Envoi d'une notification aux autres joueurs");
+		sendNotification
+				.setTitle("Envoi d'une notification aux autres joueurs");
 		matchFlexTable.setWidget(row, 7, sendNotification);
 
 		Button addMatchButton = new Button("ajouter");
@@ -297,21 +316,25 @@ public class TennisCadollesGWT implements EntryPoint {
 		String players;
 		if (match.isDoubleMatch()) {
 			if (playerMap.get(match.getWinner2().getId()) != null) {
-				winner2 = playerMap.get(match.getWinner2().getId()).getFirstName();
+				winner2 = playerMap.get(match.getWinner2().getId())
+						.getFirstName();
 			} else {
 				winner2 = "inconnu(" + match.getWinner2().getId() + ")";
 			}
 			if (playerMap.get(match.getLooser2().getId()) != null) {
-				looser2 = playerMap.get(match.getLooser2().getId()).getFirstName();
+				looser2 = playerMap.get(match.getLooser2().getId())
+						.getFirstName();
 			} else {
 				looser2 = "inconnu(" + match.getLooser2().getId() + ")";
 			}
-			players = winner1 + " " + winner2 + "<br>" + looser1 + " " + looser2;
+			players = winner1 + " " + winner2 + "<br>" + looser1 + " "
+					+ looser2;
 		} else {
 			players = winner1 + "<br>" + looser1;
 		}
 
-		final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yyyy");
+		final DateTimeFormat dateFormat = DateTimeFormat
+				.getFormat("dd.MM.yyyy");
 		matchFlexTable.setText(row, 0, dateFormat.format(match.getDate()));
 
 		matchFlexTable.setHTML(row, 1, players);
@@ -351,7 +374,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		removeStockButton.addStyleDependentName("remove");
 		removeStockButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if (Window.confirm("Veux-tu vraiment effacer le match du " + dateFormat.format(match.getDate()) + " ?")) {
+				if (Window.confirm("Veux-tu vraiment effacer le match du "
+						+ dateFormat.format(match.getDate()) + " ?")) {
 					removeMatch(id);
 				}
 
@@ -382,14 +406,16 @@ public class TennisCadollesGWT implements EntryPoint {
 		editWinner1.addItem("");
 		for (Player player : playerList) {
 			editWinner1.addItem(player.getFirstName());
-			if (match.getWinner() != null && match.getWinner().getId() == player.getId()) {
+			if (match.getWinner() != null
+					&& match.getWinner().getId() == player.getId()) {
 				editWinner1.setSelectedIndex(playerList.indexOf(player) + 1);
 			}
 		}
 		editWinner2.addItem("");
 		for (Player player : playerList) {
 			editWinner2.addItem(player.getFirstName());
-			if (match.getWinner2() != null && match.getWinner2().getId() == player.getId()) {
+			if (match.getWinner2() != null
+					&& match.getWinner2().getId() == player.getId()) {
 				editWinner2.setSelectedIndex(playerList.indexOf(player) + 1);
 			}
 		}
@@ -401,14 +427,16 @@ public class TennisCadollesGWT implements EntryPoint {
 		editLooser1.addItem("");
 		for (Player player : playerList) {
 			editLooser1.addItem(player.getFirstName());
-			if (match.getLooser() != null && match.getLooser().getId() == player.getId()) {
+			if (match.getLooser() != null
+					&& match.getLooser().getId() == player.getId()) {
 				editLooser1.setSelectedIndex(playerList.indexOf(player) + 1);
 			}
 		}
 		editLooser2.addItem("");
 		for (Player player : playerList) {
 			editLooser2.addItem(player.getFirstName());
-			if (match.getLooser2() != null && match.getLooser2().getId() == player.getId()) {
+			if (match.getLooser2() != null
+					&& match.getLooser2().getId() == player.getId()) {
 				editLooser2.setSelectedIndex(playerList.indexOf(player) + 1);
 			}
 		}
@@ -471,7 +499,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		editCommentaire.setValue(match.getCommentaire());
 		matchFlexTable.setWidget(row, 6, editCommentaire);
 		CheckBox sendNotification = new CheckBox();
-		sendNotification.setTitle("Envoi d'une notification aux autres joueurs");
+		sendNotification
+				.setTitle("Envoi d'une notification aux autres joueurs");
 		matchFlexTable.setWidget(row, 7, sendNotification);
 
 		Button saveMatchButton = new Button("sauver");
@@ -518,9 +547,10 @@ public class TennisCadollesGWT implements EntryPoint {
 			boolean notif = validateSendNotification(row);
 
 			// create the new Match
-			matchService.createMatch(date, playerArray[WINNER1], playerArray[LOOSER1], playerArray[WINNER2],
-					playerArray[LOOSER2], score, valeurMatch, valeurMatch, isDouble, commentaire, notif,
-					new AsyncCallback<Match>() {
+			matchService.createMatch(date, playerArray[WINNER1],
+					playerArray[LOOSER1], playerArray[WINNER2],
+					playerArray[LOOSER2], score, valeurMatch, valeurMatch,
+					isDouble, commentaire, notif, new AsyncCallback<Match>() {
 						public void onFailure(Throwable error) {
 							handleError(error);
 						}
@@ -557,9 +587,10 @@ public class TennisCadollesGWT implements EntryPoint {
 			boolean notif = validateSendNotification(row);
 
 			// create the new Match
-			matchService.createMatch(date, playerArray[WINNER1], playerArray[LOOSER1], playerArray[WINNER2],
-					playerArray[LOOSER2], score, valeurMatch, valeurMatch, isDouble, commentaire, notif,
-					new AsyncCallback<Match>() {
+			matchService.createMatch(date, playerArray[WINNER1],
+					playerArray[LOOSER1], playerArray[WINNER2],
+					playerArray[LOOSER2], score, valeurMatch, valeurMatch,
+					isDouble, commentaire, notif, new AsyncCallback<Match>() {
 						public void onFailure(Throwable error) {
 							handleError(error);
 						}
@@ -593,7 +624,8 @@ public class TennisCadollesGWT implements EntryPoint {
 	private Player[] validatePlayers(int row) throws MatchValidationException {
 		Player[] playerArray = new Player[4];
 		boolean isDouble = false;
-		VerticalPanel players = (VerticalPanel) matchFlexTable.getWidget(row, 1);
+		VerticalPanel players = (VerticalPanel) matchFlexTable
+				.getWidget(row, 1);
 		HorizontalPanel hz = (HorizontalPanel) players.getWidget(0);
 		ListBox addWinner1 = (ListBox) hz.getWidget(0);
 		ListBox addWinner2 = (ListBox) hz.getWidget(1);
@@ -614,26 +646,34 @@ public class TennisCadollesGWT implements EntryPoint {
 		}
 		if (addWinner2.getSelectedIndex() == 0) {
 			if (addLooser2.getSelectedIndex() != 0) {
-				throw new MatchValidationException("Veuiller entrer le 2e gagnant du double");
+				throw new MatchValidationException(
+						"Veuiller entrer le 2e gagnant du double");
 			}
 		} else {
 			isDouble = true;
 			if (addLooser2.getSelectedIndex() == 0) {
-				throw new MatchValidationException("Veuiller entrer le 2e perdant du double");
+				throw new MatchValidationException(
+						"Veuiller entrer le 2e perdant du double");
 			}
 		}
 
-		playerArray[WINNER1] = playerList.get(addWinner1.getSelectedIndex() - 1);
-		playerArray[LOOSER1] = playerList.get(addLooser1.getSelectedIndex() - 1);
+		playerArray[WINNER1] = playerList
+				.get(addWinner1.getSelectedIndex() - 1);
+		playerArray[LOOSER1] = playerList
+				.get(addLooser1.getSelectedIndex() - 1);
 		if (isDouble) {
 			if (addWinner1.getSelectedIndex() == addWinner2.getSelectedIndex()) {
-				throw new MatchValidationException("Les gagnants du double sont identiques");
+				throw new MatchValidationException(
+						"Les gagnants du double sont identiques");
 			}
 			if (addLooser1.getSelectedIndex() == addLooser2.getSelectedIndex()) {
-				throw new MatchValidationException("Les perdants du double sont identiques");
+				throw new MatchValidationException(
+						"Les perdants du double sont identiques");
 			}
-			playerArray[WINNER2] = playerList.get(addWinner2.getSelectedIndex() - 1);
-			playerArray[LOOSER2] = playerList.get(addLooser2.getSelectedIndex() - 1);
+			playerArray[WINNER2] = playerList
+					.get(addWinner2.getSelectedIndex() - 1);
+			playerArray[LOOSER2] = playerList
+					.get(addLooser2.getSelectedIndex() - 1);
 		}
 		return playerArray;
 	}
@@ -652,7 +692,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		// score validation
 		TextBox[] addScoreArray = new TextBox[6];
 
-		VerticalPanel scorePanel = (VerticalPanel) matchFlexTable.getWidget(row, 2);
+		VerticalPanel scorePanel = (VerticalPanel) matchFlexTable.getWidget(
+				row, 2);
 		addScoreArray[0] = (TextBox) scorePanel.getWidget(0);
 		addScoreArray[1] = (TextBox) scorePanel.getWidget(1);
 		scorePanel = (VerticalPanel) matchFlexTable.getWidget(row, 3);
@@ -668,46 +709,55 @@ public class TennisCadollesGWT implements EntryPoint {
 				try {
 					Integer.parseInt(score);
 				} catch (NumberFormatException e) {
-					throw new MatchValidationException("Le score doit être numérique");
+					throw new MatchValidationException(
+							"Le score doit √™tre num√©rique");
 				}
 			}
 		}
 		// first set
-		if (addScoreArray[0].getValue().isEmpty() || addScoreArray[1].getValue().isEmpty()) {
-			throw new MatchValidationException("Résulat du 1er set incorrect");
+		if (addScoreArray[0].getValue().isEmpty()
+				|| addScoreArray[1].getValue().isEmpty()) {
+			throw new MatchValidationException("R√©sulat du 1er set incorrect");
 		}
 
 		// second set
-		if (addScoreArray[2].getValue().isEmpty() && !addScoreArray[3].getValue().isEmpty()) {
-			throw new MatchValidationException("Résulat du 2e set incorrect");
+		if (addScoreArray[2].getValue().isEmpty()
+				&& !addScoreArray[3].getValue().isEmpty()) {
+			throw new MatchValidationException("R√©sulat du 2e set incorrect");
 		}
-		if (!addScoreArray[2].getValue().isEmpty() && addScoreArray[3].getValue().isEmpty()) {
-			throw new MatchValidationException("Résulat du 2e set incorrect");
+		if (!addScoreArray[2].getValue().isEmpty()
+				&& addScoreArray[3].getValue().isEmpty()) {
+			throw new MatchValidationException("R√©sulat du 2e set incorrect");
 		}
 		// third set
-		if (addScoreArray[4].getValue().isEmpty() && !addScoreArray[5].getValue().isEmpty()) {
-			throw new MatchValidationException("Résulat du 3e set incorrect");
+		if (addScoreArray[4].getValue().isEmpty()
+				&& !addScoreArray[5].getValue().isEmpty()) {
+			throw new MatchValidationException("R√©sulat du 3e set incorrect");
 		}
-		if (!addScoreArray[4].getValue().isEmpty() && addScoreArray[5].getValue().isEmpty()) {
-			throw new MatchValidationException("Résulat du 3e set incorrect");
+		if (!addScoreArray[4].getValue().isEmpty()
+				&& addScoreArray[5].getValue().isEmpty()) {
+			throw new MatchValidationException("R√©sulat du 3e set incorrect");
 		}
 
-		// si le match est terminé, il faut au moins 2 sets
+		// si le match est termin√©, il faut au moins 2 sets
 		CheckBox completedmatch = (CheckBox) matchFlexTable.getWidget(row, 5);
 		if (completedmatch.getValue()) {
 
-			if (addScoreArray[2].getValue().isEmpty() || addScoreArray[3].getValue().isEmpty()) {
+			if (addScoreArray[2].getValue().isEmpty()
+					|| addScoreArray[3].getValue().isEmpty()) {
 				throw new MatchValidationException(
-						"Le match est défini comme terminé, mais le résultat du 2e set n'est pas complet.");
+						"Le match est d√©fini comme termin√©, mais le r√©sultat du 2e set n'est pas complet.");
 			}
 		}
 
 		score = addScoreArray[0].getValue() + "-" + addScoreArray[1].getValue();
 		if (!addScoreArray[2].getValue().isEmpty()) {
-			score = score + " " + addScoreArray[2].getValue() + "-" + addScoreArray[3].getValue();
+			score = score + " " + addScoreArray[2].getValue() + "-"
+					+ addScoreArray[3].getValue();
 		}
 		if (!addScoreArray[4].getValue().isEmpty()) {
-			score = score + " " + addScoreArray[4].getValue() + "-" + addScoreArray[5].getValue();
+			score = score + " " + addScoreArray[4].getValue() + "-"
+					+ addScoreArray[5].getValue();
 		}
 		return score;
 	}
@@ -727,14 +777,13 @@ public class TennisCadollesGWT implements EntryPoint {
 		Label playerTitel = new Label("Liste des joueurs");
 		playerTitel.addStyleName("rankingTitle");
 		playerPanel.add(playerTitel);
-		
+
 		playerFlexTable = new FlexTable();
-		playerFlexTable.setText(0, 0, "Prénom");
+		playerFlexTable.setText(0, 0, "Pr√©nom");
 		playerFlexTable.setText(0, 1, "Nom");
 		playerFlexTable.setText(0, 2, "Surnom");
-		playerFlexTable.setText(0, 3, "Date de naissance");
-		playerFlexTable.setText(0, 4, "Google Account");
-		playerFlexTable.setText(0, 5, "Notification Mail");
+		playerFlexTable.setText(0, 3, "Google Account");
+		playerFlexTable.setText(0, 4, "Notification Mail");
 
 		for (Player player : playerList) {
 			final int row = playerFlexTable.getRowCount();
@@ -743,13 +792,13 @@ public class TennisCadollesGWT implements EntryPoint {
 
 		firstNamePlayer.setFocus(true);
 		final int row = playerFlexTable.getRowCount();
+		nickNamePlayer.setWidth("80px");
 		playerFlexTable.setWidget(row, 0, firstNamePlayer);
 		playerFlexTable.setWidget(row, 1, lastNamePlayer);
 		playerFlexTable.setWidget(row, 2, nickNamePlayer);
-		playerFlexTable.setWidget(row, 3, birthdayPlayer);
-		playerFlexTable.setWidget(row, 4, emailPlayer);
-		playerFlexTable.setWidget(row, 5, userIdPlayer);
-		playerFlexTable.setWidget(row, 6, addPlayerButton);
+		playerFlexTable.setWidget(row, 3, emailPlayer);
+		playerFlexTable.setWidget(row, 4, userIdPlayer);
+		playerFlexTable.setWidget(row, 5, addPlayerButton);
 
 		// Listen for mouse events on the Add button.
 		addPlayerButton.addClickHandler(new ClickHandler() {
@@ -767,14 +816,16 @@ public class TennisCadollesGWT implements EntryPoint {
 
 	private void createPlayer() {
 
-		if ((firstNamePlayer.getValue().isEmpty()) || (lastNamePlayer.getValue().isEmpty())
-				|| (nickNamePlayer.getValue().isEmpty()) || (birthdayPlayer.getValue().isEmpty())
+		if ((firstNamePlayer.getValue().isEmpty())
+				|| (lastNamePlayer.getValue().isEmpty())
+				|| (nickNamePlayer.getValue().isEmpty())
 				|| (emailPlayer.getValue().isEmpty())) {
-			Window.alert("Les données du joueur sont incomplètes");
+			Window.alert("Les donn√©es du joueur sont incompl√®tes");
 			return;
 		}
-		playerService.createAPlayer(firstNamePlayer.getValue(), lastNamePlayer.getValue(), nickNamePlayer.getValue(),
-				birthdayPlayer.getValue(), emailPlayer.getValue(), userIdPlayer.getValue(),
+		playerService.createAPlayer(firstNamePlayer.getValue(),
+				lastNamePlayer.getValue(), nickNamePlayer.getValue(),
+				emailPlayer.getValue(), userIdPlayer.getValue(),
 				new AsyncCallback<Player>() {
 					public void onFailure(Throwable error) {
 						handleError(error);
@@ -798,8 +849,6 @@ public class TennisCadollesGWT implements EntryPoint {
 		this.emailPlayer.setValue("");
 		this.userIdPlayer.setValue("");
 
-		this.birthdayPlayer.setValue("");
-
 	}
 
 	private void addPlayer(final Player player, int row) {
@@ -809,9 +858,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		playerFlexTable.setText(row, 0, player.getFirstName());
 		playerFlexTable.setHTML(row, 1, player.getLastName());
 		playerFlexTable.setHTML(row, 2, player.getNickName());
-		playerFlexTable.setHTML(row, 3, player.getBirthday());
-		playerFlexTable.setHTML(row, 4, player.getGoogleAccount());
-		playerFlexTable.setHTML(row, 5, player.getNotificationMail());
+		playerFlexTable.setHTML(row, 3, player.getGoogleAccount());
+		playerFlexTable.setHTML(row, 4, player.getNotificationMail());
 
 		Button editPlayerButton = new Button("Edit");
 		editPlayerButton.addClickHandler(new ClickHandler() {
@@ -825,7 +873,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		Button deletePlayerButton = new Button("x");
 		deletePlayerButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if (Window.confirm("Veux-tu vraiment effacer " + player.getNickName() + " ?")) {
+				if (Window.confirm("Veux-tu vraiment effacer "
+						+ player.getNickName() + " ?")) {
 					removePlayer(thePlayerId);
 				}
 			}
@@ -897,7 +946,7 @@ public class TennisCadollesGWT implements EntryPoint {
 			}
 			count++;
 		}
-		Window.alert("joueur pas trouvé dans la liste");
+		Window.alert("joueur pas trouv√© dans la liste");
 		return 0;
 	}
 
@@ -905,15 +954,19 @@ public class TennisCadollesGWT implements EntryPoint {
 
 		int row = playerList.indexOf(player) + 1;
 
-		player.setFirstName(((TextBox) playerFlexTable.getWidget(row, 0)).getValue());
-		player.setLastName(((TextBox) playerFlexTable.getWidget(row, 1)).getValue());
-		player.setNickName(((TextBox) playerFlexTable.getWidget(row, 2)).getValue());
-		player.setBirthday(((TextBox) playerFlexTable.getWidget(row, 3)).getValue());
-		player.setGoogleAccount(((TextBox) playerFlexTable.getWidget(row, 4)).getValue());
-		player.setNotificationMail(((TextBox) playerFlexTable.getWidget(row, 5)).getValue());
+		player.setFirstName(((TextBox) playerFlexTable.getWidget(row, 0))
+				.getValue());
+		player.setLastName(((TextBox) playerFlexTable.getWidget(row, 1))
+				.getValue());
+		player.setNickName(((TextBox) playerFlexTable.getWidget(row, 2))
+				.getValue());
+		player.setGoogleAccount(((TextBox) playerFlexTable.getWidget(row, 4))
+				.getValue());
+		player.setNotificationMail(((TextBox) playerFlexTable.getWidget(row, 5))
+				.getValue());
 
 		if (player.getFirstName() == null || player.getFirstName().isEmpty()) {
-			displayError("Le prénom est incorrect");
+			displayError("Le pr√©nom est incorrect");
 			return;
 		}
 
@@ -927,11 +980,9 @@ public class TennisCadollesGWT implements EntryPoint {
 			return;
 		}
 
-		if (player.getBirthday() == null || player.getBirthday().isEmpty()) {
-			displayError("La date de naissance est incorrecte");
-			return;
-		}
-		if (player.getGoogleAccount() == null || player.getGoogleAccount().isEmpty()) {
+
+		if (player.getGoogleAccount() == null
+				|| player.getGoogleAccount().isEmpty()) {
 			displayError("L'accompte google est incorrect");
 			return;
 		}
@@ -1018,6 +1069,7 @@ public class TennisCadollesGWT implements EntryPoint {
 	private void initRankingList() {
 		int rowIndex = 2;
 		rankingFlexTable = new FlexTable();
+		rankingFlexTable.setWidth("100%");
 		for (PlayerRanking player : rankingList) {
 			rankingFlexTable.setText(rowIndex, 0, player.getName());
 
@@ -1027,72 +1079,87 @@ public class TennisCadollesGWT implements EntryPoint {
 
 				if (score.getPlayerId() == player.getPlayerId()) {
 					rankingFlexTable.setText(rowIndex, columnIndex, "");
-					rankingFlexTable.getFlexCellFormatter().setColSpan(rowIndex, columnIndex, 3);
+					rankingFlexTable.getFlexCellFormatter().setColSpan(
+							rowIndex, columnIndex, 3);
+					rankingFlexTable.getFlexCellFormatter().addStyleName(
+							rowIndex, columnIndex, "blackcell");
 					columnIndex++;
 
 				} else {
 
-					rankingFlexTable.setText(rowIndex, columnIndex++, score.getTotalPointsStr());
-					rankingFlexTable.setText(rowIndex, columnIndex++, score.getTotalMatchesStr());
-					rankingFlexTable.setText(rowIndex, columnIndex++, score.getTotalPourcentStr());
+					rankingFlexTable.setText(rowIndex, columnIndex++,
+							score.getTotalPointsStr());
+					rankingFlexTable.setText(rowIndex, columnIndex++,
+							score.getTotalMatchesStr());
+					rankingFlexTable.setText(rowIndex, columnIndex++,
+							score.getTotalPourcentStr() + "%");
+					rankingFlexTable.getFlexCellFormatter().addStyleName(
+							rowIndex, columnIndex, "total");
 				}
 			}
-			rankingFlexTable.setText(rowIndex, columnIndex, player.getTotalPourcentStr());
+			rankingFlexTable.setText(rowIndex, columnIndex,
+					player.getTotalPourcentStr() + "%");
+			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex,
+					columnIndex, "total");
 			rowIndex++;
 		}
 		int playerColumnIndex = 1;
 		int columnIndex = playerColumnIndex;
 		for (PlayerRanking player : rankingList) {
 			rankingFlexTable.setText(0, playerColumnIndex, player.getName());
-			rankingFlexTable.getFlexCellFormatter().setColSpan(0, playerColumnIndex++, 3);
+			rankingFlexTable.getFlexCellFormatter().setColSpan(0,
+					playerColumnIndex++, 3);
 			rankingFlexTable.setText(1, columnIndex++, "Nbre points");
 			rankingFlexTable.setText(1, columnIndex++, "Nbre matches");
-			rankingFlexTable.setText(1, columnIndex++, "points/matchs %");
+			rankingFlexTable.setText(1, columnIndex++, "points/matchs");
 		}
-		rankingFlexTable.setText(0, playerColumnIndex, "Total %");
+		rankingFlexTable.setText(0, playerColumnIndex, "Total");
 		rankingFlexTable.setText(1, columnIndex, "");
 		rankingFlexTable.addStyleName("rankinglisttable");
-		
+
 		VerticalPanel rankingPanel = new VerticalPanel();
+		rankingPanel.setWidth("100%");
 		titelLabel.setText("Classement");
 		titelLabel.addStyleName("rankingTitle");
 		rankingPanel.add(titelLabel);
 		rankingPanel.add(rankingFlexTable);
-		
+
 		setMainPanel(rankingPanel);
 	}
 
 	private void loadRankingList() {
-		rankingService.getPlayerRanking(null, new AsyncCallback<ArrayList<PlayerRanking>>() {
-			public void onFailure(Throwable error) {
-				handleError(error);
-			}
+		rankingService.getPlayerRanking(null,
+				new AsyncCallback<ArrayList<PlayerRanking>>() {
+					public void onFailure(Throwable error) {
+						handleError(error);
+					}
 
-			public void onSuccess(ArrayList<PlayerRanking> ranking) {
-				rankingList = ranking;
-				initRankingList();
-				
-			}
-		});
+					public void onSuccess(ArrayList<PlayerRanking> ranking) {
+						rankingList = ranking;
+						initRankingList();
+
+					}
+				});
 	}
 
 	private void loadResultRankingList() {
-		rankingService.getResultRanking(null, new AsyncCallback<ResultRankingList>() {
-			public void onFailure(Throwable error) {
-				handleError(error);
-			}
+		rankingService.getResultRanking(null,
+				new AsyncCallback<ResultRankingList>() {
+					public void onFailure(Throwable error) {
+						handleError(error);
+					}
 
-			public void onSuccess(ResultRankingList result) {
-				rankingList = result.getPlayerRanking();
-				playerList = result.getPlayerList();
-				playerMap = new HashMap<Long, Player>();
-				for (Player player : playerList) {
-					playerMap.put(player.getId(), player);
-				}
-				
-				initRankingList();
-			}
-		});
+					public void onSuccess(ResultRankingList result) {
+						rankingList = result.getPlayerRanking();
+						playerList = result.getPlayerList();
+						playerMap = new HashMap<Long, Player>();
+						for (Player player : playerList) {
+							playerMap.put(player.getId(), player);
+						}
+
+						initRankingList();
+					}
+				});
 	}
 
 	private void loadServicePlayerList() {
@@ -1137,31 +1204,32 @@ public class TennisCadollesGWT implements EntryPoint {
 
 	private void handleError(Throwable error) {
 		Window.alert(error.getMessage());
-	    if (error instanceof NotLoggedInException) {
-	      Window.Location.replace(loginInfo.getLoginUrl());
-	    }
+		if (error instanceof NotLoggedInException) {
+			Window.Location.replace(loginInfo.getLoginUrl());
+		}
 	}
 
 	private void displayError(String message) {
 		Window.alert(message);
 	}
-	
+
 	private void setMainPanel(Panel panel) {
-	  RootPanel main = RootPanel.get("main");
-	  main.clear();
-	  main.add(panel);
+		RootPanel main = RootPanel.get("main");
+		main.clear();
+		main.add(panel);
 	}
-	
+
 	private boolean checkAuthorised() {
-  	  if (!loginInfo.isLoggedIn()) {
-		  Window.Location.replace(loginInfo.getLoginUrl());
-		  return false;
-	  }
-  	  if (!loginInfo.isAuthorised()) {
-  		  Window.alert("Fonction non disponible pour l'utilisateur "+loginInfo.getNickname());
-  		  return false;
-  	  }
-  	  return true;
+		if (!loginInfo.isLoggedIn()) {
+			Window.Location.replace(loginInfo.getLoginUrl());
+			return false;
+		}
+		if (!loginInfo.isAuthorised()) {
+			Window.alert("Fonction non disponible pour l'utilisateur "
+					+ loginInfo.getNickname());
+			return false;
+		}
+		return true;
 
 	}
 }

@@ -14,7 +14,7 @@ public interface PlayerService extends RemoteService{
 	
 	public TreeMap<Long, Player> getPlayerMap();
 	
-	public Player createAPlayer(String firstName, String lastName, String nickName, String birthday, String email, String userId) throws Exception;
+	public Player createAPlayer(String firstName, String lastName, String nickName, String email, String userId) throws Exception;
 	
 	public void deletePlayer(Long playerId) throws Exception;
 	

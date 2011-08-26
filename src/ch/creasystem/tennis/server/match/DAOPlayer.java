@@ -35,12 +35,12 @@ public class DAOPlayer extends DAOBASE<Player> {
 			return found;
 	}
 
-	public Player createAPlayer(String firstName, String lastName, String nickName, String birthday, String googleAccount, String notificationMail)
+	public Player createAPlayer(String firstName, String lastName, String nickName, String googleAccount, String notificationMail)
 			throws Exception {
 		Player player = ofy().query(Player.class).filter("googleAccount",googleAccount).get();
 
 		if (player == null) {
-			player = new Player(firstName, lastName, nickName, birthday, googleAccount, notificationMail);
+			player = new Player(firstName, lastName, nickName, googleAccount, notificationMail);
 			ofy().put(player);
 			return player;
 		} else {

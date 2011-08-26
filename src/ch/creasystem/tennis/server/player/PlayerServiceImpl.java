@@ -31,14 +31,14 @@ PlayerService {
 		return playerMap;
 	}
 	@Override
-	public Player createAPlayer(String firstName, String lastName, String nickName, String birthday, String googleAccount, String notificationMail) throws Exception {
-		loginService.getPlayerLoggedIn();
-		return daoPlayer.createAPlayer(firstName, lastName, nickName, birthday, googleAccount, notificationMail);
+	public Player createAPlayer(String firstName, String lastName, String nickName, String googleAccount, String notificationMail) throws Exception {
+		loginService.isUserAuthotized();
+		return daoPlayer.createAPlayer(firstName, lastName, nickName, googleAccount, notificationMail);
 	}
 
 	@Override
 	public void deletePlayer(Long playerId) throws Exception {
-		loginService.getPlayerLoggedIn();
+		loginService.isUserAuthotized();
 		Player player = daoPlayer.get(playerId);
 		if (player == null){
 			throw new Exception("Le joueur a effacé avec l'Id "+playerId+" n'existe pas.");
@@ -48,7 +48,7 @@ PlayerService {
 
 	@Override
 	public Player updatePlayer(Player player) throws Exception {
-		loginService.getPlayerLoggedIn();
+		loginService.isUserAuthotized();
 		return daoPlayer.updatePlayer(player);
 	}
 
