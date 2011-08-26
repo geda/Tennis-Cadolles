@@ -1,0 +1,2 @@
+serviceClass: ch.creasystem.tennis.client.match.MatchService
+path: 85ABE286ECBD94744AE7C702C7ACBB65.gwt.rpc
