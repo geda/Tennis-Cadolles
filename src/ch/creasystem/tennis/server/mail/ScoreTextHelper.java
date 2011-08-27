@@ -8,12 +8,12 @@ import ch.creasystem.tennis.shared.match.Match;
 import ch.creasystem.tennis.shared.player.Player;
 
 public class ScoreTextHelper {
-	private static final String[] ecrase = new String[] { "écrasé", "éclaté", "atomisé", "battu de justesse", "battu",
-			"gagné à la limite du fair-play", "mal joué mais quand même battu", "survolé les débats en battant",
-			"ridiculisé", "battu à l'arrache", "montré sa détermination en battant", "enfin réussi à battre",
-			"joué comme une m. mais quand-même battu" };
-	private static final String[] coups = new String[] { "ton coup droit", "ton service", "ton revert", "ta volé",
-			"tes amorties", "ta coupe de cheveux", "ton petit bras" };
+	private static final String[] ecrase = new String[] { "√©cras√©", "√©clat√©", "atomis√©", "battu de justesse", "battu",
+			"gagn√© √† la limite du fair-play", "mal jou√© mais quand m√™me battu", "survol√© les d√©bats en battant",
+			"ridiculis√©", "battu √† l'arrache", "montr√© sa d√©termination en battant", "enfin r√©ussi √† battre",
+			"jou√© comme une m. mais quand-m√™me battu" };
+	private static final String[] coups = new String[] { "bosse ton coup droit", "travaille ton service", "am√©liore ton revert", "frappe tes vol√©es",
+			"bosse tes amorties", "change ta coupe de cheveux", "arr√™te avect ton petit bras" };
 
 	public static String getScoreResume(Match match, TreeMap<Long, Player> playerMap) {
 
@@ -47,7 +47,7 @@ public class ScoreTextHelper {
 	public static String getMatchDetails(Match match, String nickname, TreeMap<Long, Player> playerMap) {
 		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
 		StringBuilder sb = new StringBuilder();
-		sb.append("Salut les filles,\n\nVoici encore quelques détails croustillant.\n");
+		sb.append("Salut les filles,\n\nVoici encore quelques d√©tails croustillants:\n");
 		sb.append("Date du match: ");
 		sb.append(df.format(match.getDate()));
 		sb.append("\n");
@@ -70,7 +70,7 @@ public class ScoreTextHelper {
 			sb.append(" et ");
 			sb.append(playerMap.get(match.getLooser2().getId()).getNickName());
 		}
-		sb.append(", pour le prochain match, bosse ");
+		sb.append(", pour le prochain match, ");
 		Random rando = new Random();
 		sb.append(coups[rando.nextInt(coups.length-1)]);
 		sb.append(".\n\n");
