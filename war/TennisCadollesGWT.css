@@ -1305,7 +1305,7 @@ h1 {
 	font-family:  Phyllis,'Lucida Handwriting',cursive;
 	font-size: 0.4em;
 	padding-top:25px;
-	margin-left: 20px;
+	margin-left: 40px;
 	font-weight: lighter;
 	
 }
@@ -1314,16 +1314,17 @@ h1 {
     width: 940px;    
 }
 #header {
-  	text-align: center;
+  	text-align: left;
+  	
 	
 }
 #page {
  /*   background: none repeat scroll 0 0 #FFFFFF; */
- 	background: #fff;
+ background-color: white;
     margin: auto;
     width: 940px; 
    
-	border-radius: 10px 10px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
 	-moz-box-shadow: 0 0 15px #aaa;
 	-webkit-box-shadow: 0 0 15px #aaa;
 	box-shadow: 0 0 15px #aaa;
@@ -1339,10 +1340,16 @@ h1 {
 	padding: 15px;
 }
 #navigation {
-	margin: 20px 5px 15px 5px;
+	margin: 20px 5px 5px 5px;
+	padding-top: 10px;
+	padding-bottom:5px;
 	padding-left:100px;
 	padding-right:100px;
 	align:center;
+	border-bottom: 1px solid silver;
+	border-top: 1px solid silver;
+	background-color:white;
+	/*background-color: #EDE2DE;*/
 }
 
 #login {
@@ -1359,11 +1366,16 @@ h1 {
 .loginPanel {
 	font-size: 0.8em;	
 }
+#main {
+	background-color:white;
+}
 
 #rankingList {
 	margin: 15px 5px 15px 5px;
 }
 #footer {
+	border-top: 1px solid silver;
+	padding-top:5px;
 	text-align: right;
 	margin-top:35px;
 }
@@ -1382,20 +1394,41 @@ h1 {
 
 .navigationButton {
 	height: 2.7em;
-	margin-bottom: 5px;
+	margin-bottom: 3px;
 	padding-bottom: 3px;
-	font-size: 12px;
+	font-size: 1.2em;
 	font-family: arial, sans-serif;
+	background-color: #EE8D60;
+		border-radius: 0px 7px 7px 7px;
+	-moz-box-shadow: 0 0 15px #aaa;
+	-webkit-box-shadow: 0 0 15px #aaa;
+	color:white;
 }
+
+.navigationButton:hover {
+	background-color: #F2B9A4;
+}
+
 .blackcell {
 	background-color: black;
 }
 
 .total {
 	font-weight: bold;	
+	font-size:1.2em;
 }
-
+tr td .imagePro {
+	padding:0px;
+	margin:0px;
+}
 .rankingTitle {
 font-size: 1.4em;
 margin-bottom: 15px;
+}
+.rankingColumnTitle{
+	background-color:#E5DCDC;
+	font-size:1.2em;
+}
+.rankingColumnSubTitle{
+	background-color:#F4F2F2;
 }

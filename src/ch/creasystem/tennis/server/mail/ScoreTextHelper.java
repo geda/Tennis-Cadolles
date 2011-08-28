@@ -13,7 +13,7 @@ public class ScoreTextHelper {
 			"ridiculisé", "battu à l'arrache", "montré sa détermination en battant", "enfin réussi à battre",
 			"joué comme une m. mais quand-même battu" };
 	private static final String[] coups = new String[] { "bosse ton coup droit", "travaille ton service", "améliore ton revert", "frappe tes volées",
-			"bosse tes amorties", "change ta coupe de cheveux", "arrête avect ton petit bras" };
+			"bosse tes amorties", "change ta coupe de cheveux", "arrête avec ton petit bras" };
 
 	public static String getScoreResume(Match match, TreeMap<Long, Player> playerMap) {
 

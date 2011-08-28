@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
@@ -792,7 +793,7 @@ public class TennisCadollesGWT implements EntryPoint {
 
 		firstNamePlayer.setFocus(true);
 		final int row = playerFlexTable.getRowCount();
-		nickNamePlayer.setWidth("80px");
+	//	nickNamePlayer.setWidth("80px");
 		playerFlexTable.setWidget(row, 0, firstNamePlayer);
 		playerFlexTable.setWidget(row, 1, lastNamePlayer);
 		playerFlexTable.setWidget(row, 2, nickNamePlayer);
@@ -868,7 +869,7 @@ public class TennisCadollesGWT implements EntryPoint {
 			}
 
 		});
-		playerFlexTable.setWidget(row, 6, editPlayerButton);
+		playerFlexTable.setWidget(row, 5, editPlayerButton);
 
 		Button deletePlayerButton = new Button("x");
 		deletePlayerButton.addClickHandler(new ClickHandler() {
@@ -880,7 +881,7 @@ public class TennisCadollesGWT implements EntryPoint {
 			}
 
 		});
-		playerFlexTable.setWidget(row, 7, deletePlayerButton);
+		playerFlexTable.setWidget(row, 6, deletePlayerButton);
 	}
 
 	private void displayEditPlayer(final Player player) {
@@ -896,20 +897,17 @@ public class TennisCadollesGWT implements EntryPoint {
 		playerFlexTable.setWidget(row, 1, lastname);
 
 		TextBox nickname = new TextBox();
+		nickname.setWidth("80px");
 		nickname.setValue(playerFlexTable.getText(row, 2));
 		playerFlexTable.setWidget(row, 2, nickname);
 
-		TextBox birthday = new TextBox();
-		birthday.setValue(playerFlexTable.getText(row, 3));
-		playerFlexTable.setWidget(row, 3, birthday);
-
 		TextBox email = new TextBox();
-		email.setValue(playerFlexTable.getText(row, 4));
-		playerFlexTable.setWidget(row, 4, email);
+		email.setValue(playerFlexTable.getText(row, 3));
+		playerFlexTable.setWidget(row, 3, email);
 
 		TextBox userId = new TextBox();
-		userId.setValue(playerFlexTable.getText(row, 5));
-		playerFlexTable.setWidget(row, 5, userId);
+		userId.setValue(playerFlexTable.getText(row, 4));
+		playerFlexTable.setWidget(row, 4, userId);
 
 		Button savePlayerButton = new Button("sauver");
 		savePlayerButton.addClickHandler(new ClickHandler() {
@@ -919,7 +917,7 @@ public class TennisCadollesGWT implements EntryPoint {
 
 		});
 
-		playerFlexTable.setWidget(row, 6, savePlayerButton);
+		playerFlexTable.setWidget(row, 5, savePlayerButton);
 
 		Button cancelPlayerButton = new Button("annuler");
 		cancelPlayerButton.addClickHandler(new ClickHandler() {
@@ -928,7 +926,7 @@ public class TennisCadollesGWT implements EntryPoint {
 			}
 
 		});
-		playerFlexTable.setWidget(row, 7, cancelPlayerButton);
+		playerFlexTable.setWidget(row, 6, cancelPlayerButton);
 
 	}
 
@@ -960,9 +958,9 @@ public class TennisCadollesGWT implements EntryPoint {
 				.getValue());
 		player.setNickName(((TextBox) playerFlexTable.getWidget(row, 2))
 				.getValue());
-		player.setGoogleAccount(((TextBox) playerFlexTable.getWidget(row, 4))
+		player.setGoogleAccount(((TextBox) playerFlexTable.getWidget(row, 3))
 				.getValue());
-		player.setNotificationMail(((TextBox) playerFlexTable.getWidget(row, 5))
+		player.setNotificationMail(((TextBox) playerFlexTable.getWidget(row, 4))
 				.getValue());
 
 		if (player.getFirstName() == null || player.getFirstName().isEmpty()) {
@@ -979,7 +977,6 @@ public class TennisCadollesGWT implements EntryPoint {
 			displayError("Le surnom est incorrect");
 			return;
 		}
-
 
 		if (player.getGoogleAccount() == null
 				|| player.getGoogleAccount().isEmpty()) {
@@ -1072,6 +1069,8 @@ public class TennisCadollesGWT implements EntryPoint {
 		rankingFlexTable.setWidth("100%");
 		for (PlayerRanking player : rankingList) {
 			rankingFlexTable.setText(rowIndex, 0, player.getName());
+			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex, 0,
+					"rankingColumnTitle");
 
 			int columnIndex = 1;
 
@@ -1093,27 +1092,47 @@ public class TennisCadollesGWT implements EntryPoint {
 							score.getTotalMatchesStr());
 					rankingFlexTable.setText(rowIndex, columnIndex++,
 							score.getTotalPourcentStr() + "%");
-					rankingFlexTable.getFlexCellFormatter().addStyleName(
-							rowIndex, columnIndex, "total");
+
 				}
 			}
-			rankingFlexTable.setText(rowIndex, columnIndex,
-					player.getTotalPourcentStr() + "%");
 			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex,
 					columnIndex, "total");
+
+			rankingFlexTable.setText(rowIndex, columnIndex++,
+					player.getTotalPourcentStr() + "%");
+			Image image = new Image("/images/"+ player.getName()+"-50.jpg");
+			rankingFlexTable.setWidget(rowIndex, columnIndex, image);
+//			String img = "<img src=\"/images/" + player.getName()
+//					+ "-50.jpg\"/>"; // "+"logo.png/">;
+//			rankingFlexTable.setHTML(rowIndex, columnIndex, img);
+			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex,
+					columnIndex, "imagePro");
+
 			rowIndex++;
 		}
 		int playerColumnIndex = 1;
 		int columnIndex = playerColumnIndex;
 		for (PlayerRanking player : rankingList) {
 			rankingFlexTable.setText(0, playerColumnIndex, player.getName());
+			rankingFlexTable.getFlexCellFormatter().addStyleName(0,
+					playerColumnIndex, "rankingColumnTitle");
 			rankingFlexTable.getFlexCellFormatter().setColSpan(0,
 					playerColumnIndex++, 3);
+			rankingFlexTable.getFlexCellFormatter().addStyleName(1,
+					columnIndex, "rankingColumnSubTitle");
 			rankingFlexTable.setText(1, columnIndex++, "Nbre points");
+			rankingFlexTable.getFlexCellFormatter().addStyleName(1,
+					columnIndex, "rankingColumnSubTitle");
+
 			rankingFlexTable.setText(1, columnIndex++, "Nbre matches");
+			rankingFlexTable.getFlexCellFormatter().addStyleName(1,
+					columnIndex, "rankingColumnSubTitle");
 			rankingFlexTable.setText(1, columnIndex++, "points/matchs");
+
 		}
 		rankingFlexTable.setText(0, playerColumnIndex, "Total");
+		rankingFlexTable.getFlexCellFormatter().addStyleName(0,
+				playerColumnIndex, "rankingColumnTitle");
 		rankingFlexTable.setText(1, columnIndex, "");
 		rankingFlexTable.addStyleName("rankinglisttable");
 
