@@ -1380,6 +1380,11 @@ h1 {
 	margin-top:35px;
 }
 
+#footer a, #footer a:visited,#footer a:hover   {
+  color: white;
+  text-decoration:none;
+}
+
 
 /* Ranking list flex table */
 .rankinglisttable tr td {

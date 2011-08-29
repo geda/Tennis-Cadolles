@@ -1100,11 +1100,9 @@ public class TennisCadollesGWT implements EntryPoint {
 
 			rankingFlexTable.setText(rowIndex, columnIndex++,
 					player.getTotalPourcentStr() + "%");
-			Image image = new Image("/images/"+ player.getName()+"-50.jpg");
+			String imageName = player.getName().toLowerCase().replace('é', 'e');
+			Image image = new Image("/images/"+imageName+"-50.jpg");
 			rankingFlexTable.setWidget(rowIndex, columnIndex, image);
-//			String img = "<img src=\"/images/" + player.getName()
-//					+ "-50.jpg\"/>"; // "+"logo.png/">;
-//			rankingFlexTable.setHTML(rowIndex, columnIndex, img);
 			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex,
 					columnIndex, "imagePro");
 

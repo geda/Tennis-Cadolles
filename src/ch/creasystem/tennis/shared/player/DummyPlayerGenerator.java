@@ -11,7 +11,7 @@ public class DummyPlayerGenerator {
 		
 		playerList.add(new Player("David","Gerber", "Kuba", "a@b.com", null));
 		playerList.add(new Player("Patrick", "Kocher", "Hakin", "a@b.com", null));
-		playerList.add(new Player("Gaetan", "Bernier", "Amélie",  "a@b.com", null));
+		playerList.add(new Player("Gaetan", "Bernier", "Am√©lie",  "a@b.com", null));
 		playerList.add(new Player("Juan","Lopez", "Aranxa",  "a@b.com", null));
 		return playerList;
 	}
