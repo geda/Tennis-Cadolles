@@ -1,9 +1,10 @@
 package ch.creasystem.tennis.shared.ranking;
 
-import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public class OponentScore implements IsSerializable {
+import com.google.gwt.i18n.client.NumberFormat;
+
+public class OponentScore implements Serializable {
 
 	private long playerId;
 	private String name;

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import net.sf.jsr107cache.Cache;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.player.PlayerService;
 import ch.creasystem.tennis.client.ranking.RankingService;
+import ch.creasystem.tennis.server.cache.TennisCache;
 import ch.creasystem.tennis.server.match.MatchServiceImpl;
 import ch.creasystem.tennis.server.player.PlayerServiceImpl;
 import ch.creasystem.tennis.shared.match.Match;
@@ -23,19 +25,21 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class RankingServiceImpl extends RemoteServiceServlet implements
 RankingService {
 
+	
 	MatchService matchService = new MatchServiceImpl();
 	PlayerService playerService = new PlayerServiceImpl();
 	
 	@Override
 	public ArrayList<PlayerRanking> getPlayerRanking(Integer saison) throws Exception {
-		RankingList rankingList = this.calculateRanking(saison);
-		return new ArrayList<PlayerRanking> ( rankingList.getPlayerRankingMap().values());
+		return new ArrayList<PlayerRanking> ( getRankingList().getPlayerRankingMap().values());
 	}
 	
 
 	@Override
 	public ResultRankingList getResultRanking(Integer saison) throws Exception {
-		RankingList rankingList = this.calculateRanking(saison);
+		
+		RankingList rankingList = getRankingList();
+		
 		ResultRankingList result = new ResultRankingList();
 		
 		result.setPlayerRanking(new ArrayList<PlayerRanking> ( rankingList.getPlayerRankingMap().values()));
@@ -43,6 +47,15 @@ RankingService {
 		return result;
 	}
 	
+	private RankingList getRankingList() throws Exception {
+		Cache cache = TennisCache.getInstance().getCache();
+		RankingList rankingList = (RankingList) cache.get(TennisCache.PLAYER_RANKING_LIST);
+		if (rankingList == null) {
+			rankingList = this.calculateRanking(null);
+			cache.put(TennisCache.PLAYER_RANKING_LIST, rankingList);
+		}
+		return rankingList;
+	}
 	
 	private RankingList calculateRanking(Integer saison) throws Exception {
 		RankingList rankingList = new RankingList();
@@ -74,11 +87,11 @@ RankingService {
 		Long looserId = match.getLooser().getId();
 		PlayerRanking looserRanking1 = rankingList.getRankingForPlayer(rankingList.getPlayerMap().get(looserId));
 		
-		// Ajouter le match avec zŽro points
+		// Ajouter le match avec zï¿½ro points
 		looserRanking1.addTotalMatches(match.getValeurMatch());
 		looserRanking1.addTotalPoints(0f);
 
-		// Ajouter le match gagnant ˆ son opposant
+		// Ajouter le match gagnant ï¿½ son opposant
 		Player winner1 = rankingList.getPlayerMap().get(match.getWinner().getId());
 		OponentScore scoreWinnner = looserRanking1.getScoreForOpponent(winner1);
 		if (match.isDoubleMatch()) {
@@ -105,12 +118,12 @@ RankingService {
 			looserRanking2.addTotalMatches(match.getValeurMatch());
 			looserRanking2.addTotalPoints(0f);
 
-			//Ajouter le match gagnŽ du 2e joueur a son 1e opposant
+			//Ajouter le match gagnï¿½ du 2e joueur a son 1e opposant
 			OponentScore looser2winner1Score = looserRanking2.getScoreForOpponent(winner1);
 			looser2winner1Score.addTotalMatches(match.getValeurMatch()/2);
 			looser2winner1Score.addTotalPoints(0f);
 
-			//Ajouter le match gagnŽ du 2e joueur a son 2e opposant 
+			//Ajouter le match gagnï¿½ du 2e joueur a son 2e opposant 
 			OponentScore looser2winner2Score = looserRanking2.getScoreForOpponent(winner2);
 			looser2winner2Score.addTotalMatches(match.getValeurMatch()/2);
 			looser2winner2Score.addTotalPoints(0f);
@@ -119,13 +132,13 @@ RankingService {
 
 	private void calculateRankingWinner(RankingList rankingList, Match match) throws EntityNotFoundException {
 		
-		// lire le ranking du winner et ajouter le match gagnŽ au total des matches
+		// lire le ranking du winner et ajouter le match gagnï¿½ au total des matches
 		Long winnerId = match.getWinner().getId();
 		PlayerRanking winnerRanking1 = rankingList.getRankingForPlayer(rankingList.getPlayerMap().get(winnerId));
 		winnerRanking1.addTotalMatches(match.getValeurMatch());
 		winnerRanking1.addTotalPoints(match.getPoint());
 
-		// Ajouter le match gagnŽ ˆ son opposant
+		// Ajouter le match gagnï¿½ ï¿½ son opposant
 		Player looser1 = rankingList.getPlayerMap().get(match.getLooser().getId());
 		OponentScore score = winnerRanking1.getScoreForOpponent(looser1);
 		
@@ -138,25 +151,25 @@ RankingService {
 		}
 
 		if (match.isDoubleMatch()) {
-			//Ajouter le match gagnŽ du premier joueur a son 2e opposant au 2e joueur
+			//Ajouter le match gagnï¿½ du premier joueur a son 2e opposant au 2e joueur
 			Player looser2 = rankingList.getPlayerMap().get(match.getLooser2().getId());
 			
 			OponentScore winner1Looser2Score = winnerRanking1.getScoreForOpponent(looser2);
 			winner1Looser2Score.addTotalMatches(match.getValeurMatch()/2);
 			winner1Looser2Score.addTotalPoints(match.getPoint()/2);
 			
-			// Ajouter le match gangnŽ au 2e joueur
+			// Ajouter le match gangnï¿½ au 2e joueur
 			Long winnerId2 = match.getWinner2().getId();
 			PlayerRanking winnerRanking2 = rankingList.getRankingForPlayer(rankingList.getPlayerMap().get(winnerId2));
 			winnerRanking2.addTotalMatches(match.getValeurMatch());
 			winnerRanking2.addTotalPoints(match.getPoint());
 
-			//Ajouter le match gagnŽ du 2e joueur a son 1e opposant
+			//Ajouter le match gagnï¿½ du 2e joueur a son 1e opposant
 			OponentScore winner2looser1Score = winnerRanking2.getScoreForOpponent(looser1);
 			winner2looser1Score.addTotalMatches(match.getValeurMatch()/2);
 			winner2looser1Score.addTotalPoints(match.getPoint()/2);
 
-			//Ajouter le match gagnŽ du 2e joueur a son 2e opposant 
+			//Ajouter le match gagnï¿½ du 2e joueur a son 2e opposant 
 			OponentScore winner2looser2Score = winnerRanking2.getScoreForOpponent(looser2);
 			winner2looser2Score.addTotalMatches(match.getValeurMatch()/2);
 			winner2looser2Score.addTotalPoints(match.getPoint()/2);

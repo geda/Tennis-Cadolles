@@ -39,6 +39,7 @@ public class EmailHelper {
 									player.getNickName()));
 				}
 			}
+			msg.setHeader("Content-Type", "text/plain; charset=UTF-8");
 			msg.setSubject(ScoreTextHelper.getScoreResume(match, playerMap));
 			MimeMultipart content = new MimeMultipart("matches");
 			MimeBodyPart mbp1 = new MimeBodyPart();
@@ -49,7 +50,7 @@ public class EmailHelper {
 			MimeBodyPart attachment = new MimeBodyPart();
 			// prepare attachment using a bytearraydatasource
 			DataSource src = new ByteArrayDataSource(
-					classement.getBytes("UTF8"), "text/csv");
+					classement.getBytes("UTF-8"), "text/csv");
 			attachment.setFileName("Matches.csv");
 			attachment.setDataHandler(new DataHandler(src));
 

@@ -14,6 +14,7 @@ import ch.creasystem.tennis.client.login.LoginService;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.match.MatchValidationException;
 import ch.creasystem.tennis.client.player.PlayerService;
+import ch.creasystem.tennis.server.cache.TennisCache;
 import ch.creasystem.tennis.server.login.LoginServiceImpl;
 import ch.creasystem.tennis.server.mail.EmailHelper;
 import ch.creasystem.tennis.server.player.PlayerServiceImpl;
@@ -55,11 +56,11 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		}
 
 		if (winner == null || looser == null) {
-			throw new MatchValidationException("Le gagnant ou le perdant n'est pas dŽfini");
+			throw new MatchValidationException("Le gagnant ou le perdant n'est pas dï¿½fini");
 		}
 		if (doubleMatch) {
 			if (winner2 == null || looser2 == null) {
-				throw new MatchValidationException("Le 2e gagnant ou le 2e perdant n'est pas dŽfini");
+				throw new MatchValidationException("Le 2e gagnant ou le 2e perdant n'est pas dï¿½fini");
 			}
 		}
 
@@ -68,7 +69,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		}
 
 		if (point == null || valeurMatch == null) {
-			throw new MatchValidationException("Le nombre de points ou la valeur du match n'est pas dŽfini");
+			throw new MatchValidationException("Le nombre de points ou la valeur du match n'est pas dï¿½fini");
 		}
 		Match match = daoMatch.createMatch(date, winner, looser, winner2, looser2, score, point, valeurMatch, doubleMatch,
 				commentaire);
@@ -76,6 +77,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 			String classement = getAllMatchCsv();
 			EmailHelper.sendNotificationMail(loggedPlayer, match, playerService.getPlayerMap(), classement);
 		}
+		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 		return match;
 	}
 
@@ -88,12 +90,13 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 			throw new Exception("Le Match a effacer avec l'Id " + matchId + " n'existe pas.");
 		}
 		daoMatch.delete(match);
-
+		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 	}
 
 	@Override
 	public Match updateMatch(Match match) throws Exception {
 		loginService.isUserAuthotized();
+		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 		return daoMatch.updateMatch(match);
 	}
 

@@ -1,12 +1,12 @@
 package ch.creasystem.tennis.shared.ranking;
 
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 import ch.creasystem.tennis.shared.player.Player;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
@@ -15,9 +15,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author gerberda
  * 
  */
-//public class PlayerRanking implements IsSerializable, Comparable<PlayerRanking> {
-	public class PlayerRanking implements IsSerializable {
+	public class PlayerRanking implements Serializable {
 
+   
 	private Long playerId;
 	private String name;
 	private Float totalPoints;

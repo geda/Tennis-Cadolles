@@ -1,5 +1,6 @@
 package ch.creasystem.tennis.shared.ranking;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -7,14 +8,14 @@ import ch.creasystem.tennis.shared.player.Player;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
-public class RankingList {
+public class RankingList implements Serializable {
 
 	private Map<Long, PlayerRanking> playerRankingMap = new TreeMap<Long, PlayerRanking>();
 	private TreeMap<Long, Player> playerMap;
 
-	public PlayerRanking getRankingForPlayer(Player player) throws EntityNotFoundException {
+	public PlayerRanking getRankingForPlayer(Player player)
+			throws EntityNotFoundException {
 		PlayerRanking ranking = playerRankingMap.get(player.getId());
-		
 
 		if (ranking == null) {
 			ranking = new PlayerRanking();
@@ -54,7 +55,5 @@ public class RankingList {
 	public void setPlayerRankingMap(Map<Long, PlayerRanking> playerRankingMap) {
 		this.playerRankingMap = playerRankingMap;
 	}
-	
-	
 
 }
