@@ -3,18 +3,17 @@ package ch.creasystem.tennis.shared.match;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import ch.creasystem.tennis.shared.player.Player;
 
 import com.googlecode.objectify.Key;
 /**
- * ReprŽsente un match
+ * Reprï¿½sente un match
  * @author gerberda
  *
  */
-@Entity
+
 public class Match implements Serializable, Comparable<Match> {
 
 	@Id
@@ -118,6 +117,9 @@ public class Match implements Serializable, Comparable<Match> {
 		return id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	public Key<Player> getWinner() {
 		return winner;

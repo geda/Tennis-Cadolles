@@ -14,7 +14,6 @@ import ch.creasystem.tennis.client.login.LoginService;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.match.MatchValidationException;
 import ch.creasystem.tennis.client.player.PlayerService;
-import ch.creasystem.tennis.server.cache.TennisCache;
 import ch.creasystem.tennis.server.login.LoginServiceImpl;
 import ch.creasystem.tennis.server.mail.EmailHelper;
 import ch.creasystem.tennis.server.player.PlayerServiceImpl;
@@ -44,10 +43,23 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		Collections.sort(matchList);
 		return matchList;
 	}
-
+	
+	@Override
+	public Match createMatch(Match newMatch, boolean sendNotification) throws Exception {
+		Player loggedPlayer = loginService.isUserAuthotized();
+		
+		Match match = daoMatch.createMatch(newMatch);
+		if (sendNotification) {
+			String classement = getAllMatchCsv();
+			EmailHelper.sendNotificationMail(loggedPlayer, match, playerService.getPlayerMap(), classement);
+		}
+		//TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
+		return match;
+	}
+	
 	@Override
 	public Match createMatch(Date date, Player winner, Player looser, Player winner2, Player looser2, String score,
-			Float point, Float valeurMatch, Boolean doubleMatch, String commentaire, Boolean sendNotification) throws Exception {
+			Float point, Float valeurMatch, Boolean doubleMatch, String commentaire, boolean sendNotification) throws Exception {
 		
 		Player loggedPlayer = loginService.isUserAuthotized();
 		
@@ -56,11 +68,11 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		}
 
 		if (winner == null || looser == null) {
-			throw new MatchValidationException("Le gagnant ou le perdant n'est pas d�fini");
+			throw new MatchValidationException("Le gagnant ou le perdant n'est pas défini");
 		}
 		if (doubleMatch) {
 			if (winner2 == null || looser2 == null) {
-				throw new MatchValidationException("Le 2e gagnant ou le 2e perdant n'est pas d�fini");
+				throw new MatchValidationException("Le 2e gagnant ou le 2e perdant n'est pas défini");
 			}
 		}
 
@@ -69,7 +81,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		}
 
 		if (point == null || valeurMatch == null) {
-			throw new MatchValidationException("Le nombre de points ou la valeur du match n'est pas d�fini");
+			throw new MatchValidationException("Le nombre de points ou la valeur du match n'est pas défini");
 		}
 		Match match = daoMatch.createMatch(date, winner, looser, winner2, looser2, score, point, valeurMatch, doubleMatch,
 				commentaire);
@@ -77,7 +89,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 			String classement = getAllMatchCsv();
 			EmailHelper.sendNotificationMail(loggedPlayer, match, playerService.getPlayerMap(), classement);
 		}
-		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
+		//TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 		return match;
 	}
 
@@ -90,13 +102,13 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 			throw new Exception("Le Match a effacer avec l'Id " + matchId + " n'existe pas.");
 		}
 		daoMatch.delete(match);
-		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
+		//TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 	}
 
 	@Override
 	public Match updateMatch(Match match) throws Exception {
 		loginService.isUserAuthotized();
-		TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
+		//TennisCache.getInstance().getCache().remove(TennisCache.PLAYER_RANKING_LIST);
 		return daoMatch.updateMatch(match);
 	}
 
@@ -136,6 +148,14 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public Match getMatch(Long matchId) throws Exception {
+		if (matchId == null) {
+			throw new IllegalArgumentException("matchId is not defined");
+		}
+		return daoMatch.get(matchId);
 	}
 
 }

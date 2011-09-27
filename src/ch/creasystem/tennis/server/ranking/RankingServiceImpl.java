@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import net.sf.jsr107cache.Cache;
 import ch.creasystem.tennis.client.match.MatchService;
 import ch.creasystem.tennis.client.player.PlayerService;
 import ch.creasystem.tennis.client.ranking.RankingService;
-import ch.creasystem.tennis.server.cache.TennisCache;
 import ch.creasystem.tennis.server.match.MatchServiceImpl;
 import ch.creasystem.tennis.server.player.PlayerServiceImpl;
 import ch.creasystem.tennis.shared.match.Match;
@@ -48,12 +46,14 @@ RankingService {
 	}
 	
 	private RankingList getRankingList() throws Exception {
-		Cache cache = TennisCache.getInstance().getCache();
+/*		Cache cache = TennisCache.getInstance().getCache();
 		RankingList rankingList = (RankingList) cache.get(TennisCache.PLAYER_RANKING_LIST);
 		if (rankingList == null) {
 			rankingList = this.calculateRanking(null);
 			cache.put(TennisCache.PLAYER_RANKING_LIST, rankingList);
 		}
+*/
+		RankingList rankingList = this.calculateRanking(null);
 		return rankingList;
 	}
 	

@@ -2,15 +2,15 @@ package ch.creasystem.tennis.shared.player;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
+
+
 
 /**
  * Define an Entity Player
  * @author gerberda
  *
  */
-@Entity
 public class Player implements Serializable {
 	
 	@Id

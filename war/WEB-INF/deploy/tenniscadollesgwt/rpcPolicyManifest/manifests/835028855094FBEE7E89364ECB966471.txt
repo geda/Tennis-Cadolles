@@ -1,0 +1,2 @@
+serviceClass: ch.creasystem.tennis.client.ranking.RankingService
+path: 125FFEB95AC0CECEC94D7277B47A7C38.gwt.rpc

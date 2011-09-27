@@ -15,12 +15,15 @@ public interface MatchService extends RemoteService{
 	public String getAllMatchCsv() throws Exception;
 	
 	public ArrayList<Match> getMatchList(Integer saison);
-	
+	public Match createMatch(Match newMatch, boolean sendNotification) throws Exception;
+		
 	public Match createMatch(Date date, Player winner, Player looser,
 			Player winner2, Player looser2, String score, Float point, Float valeurMatch,
-			Boolean doubleMatch, String commentaire, Boolean sendNotification) throws Exception;
+			Boolean doubleMatch, String commentaire, boolean sendNotification) throws Exception;
 	
 	public void deleteMatch(Long MatchId) throws Exception;
 	
 	public Match updateMatch(Match match) throws Exception;
+	
+	public Match getMatch(Long matchId) throws Exception;
 }

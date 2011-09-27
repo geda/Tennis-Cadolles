@@ -2,8 +2,6 @@ package ch.creasystem.tennis.shared.ranking;
 
 import java.io.Serializable;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 public class OponentScore implements Serializable {
 
 	private long playerId;
@@ -57,24 +55,12 @@ public class OponentScore implements Serializable {
 		return totalMatches;
 	}
 	
-	public String getTotalMatchesStr() {
-		if (this.totalMatches != null) {
-			return NumberFormat.getFormat("#.##").format(this.totalMatches);
-		}
-		return "";
-	}
 	
 	public void setTotalMatches(Float totalMatches) {
 		this.totalMatches = totalMatches;
 	}
 	public Float getTotalPoints() {
 		return totalPoints;
-	}
-	public String getTotalPointsStr() {
-		if (this.totalPoints != null) {
-			return NumberFormat.getFormat("#.##").format(this.totalPoints);
-		}
-		return "";
 	}
 	
 	public void setTotalPoints(Float totalPoints) {
@@ -89,12 +75,6 @@ public class OponentScore implements Serializable {
 		return null;
 	}
 	
-	public String getTotalPourcentStr() {
-		if (getTotalPourcent() != null) {
-			return NumberFormat.getFormat("#.##").format(getTotalPourcent());
-		}
-		return "";
-	}
 
 
 	@Override

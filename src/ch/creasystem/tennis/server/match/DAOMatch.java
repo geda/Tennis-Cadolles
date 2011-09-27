@@ -49,6 +49,14 @@ public class DAOMatch extends DAOBASE<Match> {
 		return match;
 	}
 	
+	public Match createMatch(Match newMatch) {
+		if (newMatch == null || newMatch.getId()!= null) {
+			throw new IllegalArgumentException("New match is null or id is already defined");
+		}
+		ofy().put(newMatch);
+		return newMatch;
+	}
+	
 
 		
 	public List<Match> findMatchesForSeason(int year) {

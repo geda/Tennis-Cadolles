@@ -5,6 +5,10 @@
 
 <web-app>
   
+  <context-param>
+       <param-name>org.restlet.application</param-name>
+       <param-value>ch.creasystem.tennis.server.rest.RestletDispatch</param-value>
+   </context-param>
   <!-- Servlets -->
   
   	<servlet>
@@ -25,6 +29,12 @@
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>ch.creasystem.tennis.server.login.LoginServiceImpl</servlet-class>
 	</servlet>
+	
+	<servlet>
+      <servlet-name>RestletServlet</servlet-name>
+      <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+   </servlet>
+
   <servlet-mapping>
     <servlet-name>rankingService</servlet-name>
     <url-pattern>/tenniscadollesgwt/ranking</url-pattern>
@@ -43,7 +53,11 @@
 		<servlet-name>matchService</servlet-name>
 		<url-pattern>/tenniscadollesgwt/match</url-pattern>
 	</servlet-mapping>
-	
+
+   <servlet-mapping>
+      <servlet-name>RestletServlet</servlet-name>
+      <url-pattern>/rest/*</url-pattern>
+   </servlet-mapping>	
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>TennisCadollesGWT.html</welcome-file>

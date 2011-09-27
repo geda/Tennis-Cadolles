@@ -1,6 +1,2 @@
 # Module tenniscadollesgwt
 # RPC service class, partial path of RPC policy file
-ch.creasystem.tennis.client.match.MatchService, 85ABE286ECBD94744AE7C702C7ACBB65.gwt.rpc
-ch.creasystem.tennis.client.player.PlayerService, 958C4353E45F331D1DFCACCCBDF9F396.gwt.rpc
-ch.creasystem.tennis.client.login.LoginService, B389A7A9BFFDC89469E7047C2724F9EC.gwt.rpc
-ch.creasystem.tennis.client.ranking.RankingService, DA7E895881BAE5161DA33979BD28C801.gwt.rpc

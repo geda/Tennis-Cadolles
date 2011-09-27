@@ -26,6 +26,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -1086,20 +1087,36 @@ public class TennisCadollesGWT implements EntryPoint {
 
 				} else {
 
+					String totalPoint="";
+					if (score.getTotalPoints() != null) {
+						totalPoint = NumberFormat.getFormat("#.##").format(score.getTotalPoints());
+					}
+					String totalMatch="";
+					if (score.getTotalMatches() != null) {
+						totalMatch = NumberFormat.getFormat("#.##").format(score.getTotalMatches());
+					}
+					String totalPourcent="";
+					if (score.getTotalPourcent() != null) {
+						totalPourcent = NumberFormat.getFormat("#.##").format(score.getTotalPourcent());
+					}
+					
 					rankingFlexTable.setText(rowIndex, columnIndex++,
-							score.getTotalPointsStr());
+							totalPoint);
 					rankingFlexTable.setText(rowIndex, columnIndex++,
-							score.getTotalMatchesStr());
+							totalMatch);
 					rankingFlexTable.setText(rowIndex, columnIndex++,
-							score.getTotalPourcentStr() + "%");
+							totalPourcent + "%");
 
 				}
 			}
 			rankingFlexTable.getFlexCellFormatter().addStyleName(rowIndex,
 					columnIndex, "total");
-
+			String totalPlayerPourcent="";
+			if (player.getTotalPourcent() != null) {
+				totalPlayerPourcent = NumberFormat.getFormat("#.##").format(player.getTotalPourcent());
+			}
 			rankingFlexTable.setText(rowIndex, columnIndex++,
-					player.getTotalPourcentStr() + "%");
+					totalPlayerPourcent + "%");
 			String imageName = player.getName().toLowerCase().replace('é', 'e');
 			Image image = new Image("/images/"+imageName+"-50.jpg");
 			rankingFlexTable.setWidget(rowIndex, columnIndex, image);

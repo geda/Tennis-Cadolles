@@ -6,8 +6,6 @@ import java.util.TreeMap;
 
 import ch.creasystem.tennis.shared.player.Player;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 
 /**
  * Rang final du joueur
@@ -17,7 +15,6 @@ import com.google.gwt.i18n.client.NumberFormat;
  */
 	public class PlayerRanking implements Serializable {
 
-   
 	private Long playerId;
 	private String name;
 	private Float totalPoints;
@@ -62,12 +59,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 		return totalPoints;
 	}
 	
-	public String getTotalPointsStr() {
-		if (this.totalPoints != null) {
-			return NumberFormat.getFormat("#.##").format(this.totalPoints);
-		}
-		return "";
-	}
 
 	public void setTotalPoints(Float totalPoints) {
 		this.totalPoints = totalPoints;
@@ -78,12 +69,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 		return totalMatches;
 	}
 
-	public String getTotalMatchesStr() {
-		if (this.totalMatches != null) {
-			return NumberFormat.getFormat("#.##").format(this.totalMatches);
-		}
-		return "";
-	}
 	
 	public void setTotalMatches(Float totalMatches) {
 		this.totalMatches = totalMatches;
@@ -117,16 +102,6 @@ import com.google.gwt.i18n.client.NumberFormat;
 		return total / index;
 	}
 	
-	public String getTotalPourcentStr() {
-		if (getTotalPourcent() != null) {
-
-			return NumberFormat.getFormat("#.##").format(getTotalPourcent());
-		}
-		return "";
-	}
-
-
-
 	public TreeMap<Long, OponentScore> getOpponentResult() {
 		return opponentResult;
 	}
